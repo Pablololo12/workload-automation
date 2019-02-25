@@ -17,13 +17,14 @@ class matrixbench(Workload):
         Parameter('matrix_size', kind=int, default=256, description='Matrix size.'),
         Parameter('duration', kind=int, default=3600, description='Maximun duration in seconds.'),
         Parameter('which_cpus', kind=str, default='all', description='Select on which cpu the benchmark should be execute.'),
-        Parameter('num_iter', kind=int, default=10, description='Select the number of iterations to perform')
+        Parameter('num_iter', kind=int, default=10, description='Select the number of iterations to perform'),
+        Parameter('num_loop', kind=int, default=10, description='Select the number of loops to perform')
     ]
 
     def setup(self, context):
         super(matrixbench, self).setup(context)
         self.binary_name = 'benchmark'
-        self.command = '{} -t {} -m {} -c {} -i {} > {}'
+        self.command = '{} -t {} -m {} -c {} -i {} -l {}> {}'
 
         host_binary = context.resolver.get(Executable(self, self.target.abi,
                                                             self.binary_name))
@@ -33,7 +34,7 @@ class matrixbench(Workload):
 
         self.command = self.command.format(self.device_binary, self.num_threads,
                                             self.matrix_size, self.which_cpus,
-                                            self.num_iter,
+                                            self.num_iter, self.num_loop,
                                             self.hackbench_result)
 
     def run(self, context):
